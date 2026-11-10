@@ -91,8 +91,8 @@
           <i data-lucide="cloud-upload" class="w-4 h-4"></i>
           <span class="hidden md:inline">Subir</span>
         </button>
-        <button onclick="openDriveConfigModal()" id="drive-status-btn" title="Configurar Sincronização com Google Drive" class="px-2.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 transition-colors flex items-center gap-1.5 text-xs font-semibold">
-          <i data-lucide="cloud" class="w-4 h-4 text-sky-400"></i>
+        <button onclick="openDriveConfigModal()" id="drive-status-btn" title="Configurar Senha e Sincronização com Google Drive" class="px-2.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 transition-colors flex items-center gap-1.5 text-xs font-semibold">
+          <i data-lucide="shield-check" class="w-4 h-4 text-sky-400"></i>
           <span id="drive-status-text" class="hidden sm:inline">Drive</span>
         </button>
         <button onclick="exportBackupJSON()" title="Exportar Backup JSON Local" class="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 transition-colors flex items-center gap-1 text-xs font-medium">
@@ -148,7 +148,7 @@
         <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
           <div>
             <h2 id="calendar-month-title" class="text-lg sm:text-xl font-extrabold text-white capitalize flex items-center gap-2"></h2>
-            <p class="text-xs text-slate-400">Dias destacados em verde indicam treinos realizados. Toque em qualquer dia para consultar ou treinar.</p>
+            <p class="text-xs text-slate-400">Dias destacados em verde indicam treinos realizados. Toque em qualquer dia para consultar, editar ou excluir.</p>
           </div>
           <div class="flex items-center gap-1.5">
             <button onclick="changeCalendarMonth(-1)" class="p-2 rounded-xl bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800 transition-colors">
@@ -281,7 +281,7 @@
               <i data-lucide="history" class="w-5 h-5 text-emerald-400"></i>
               Histórico & Comparação de Treinos
             </h2>
-            <p class="text-xs text-slate-400 mt-0.5">Consulte suas sessões passadas, compare a progressão ou repita um treino.</p>
+            <p class="text-xs text-slate-400 mt-0.5">Consulte suas sessões passadas, compare a progressão, edite ou exclua um treino.</p>
           </div>
           <div class="relative w-full sm:w-64">
             <i data-lucide="search" class="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
@@ -554,37 +554,51 @@
     </div>
   </div>
 
-  <!-- MODAL 6: CONFIGURAR GOOGLE DRIVE -->
+  <!-- MODAL 6: CONFIGURAR GOOGLE DRIVE & AUTENTICAÇÃO -->
   <div id="modal-drive-config" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4">
       <div class="flex items-center justify-between border-b border-slate-800 pb-3">
         <h3 class="text-base font-bold text-white flex items-center gap-2">
-          <i data-lucide="cloud" class="w-5 h-5 text-sky-400"></i>
-          Sincronização Automática — Google Drive
+          <i data-lucide="shield-check" class="w-5 h-5 text-emerald-400"></i>
+          Segurança & Google Drive
         </h3>
         <button onclick="closeDriveConfigModal()" class="p-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
       <p class="text-xs text-slate-300 leading-relaxed">
-        Sua URL do <strong>App da Web do Google Apps Script</strong> já está configurada por padrão. O aplicativo importa ao abrir, salva fotos/GIFs na nuvem e exporta automaticamente toda vez que você finalizar um treino ou editar um exercício.
+        Digite sua <strong>Chave de Segurança (Senha)</strong> definida no Google Apps Script. Ela fica salva apenas neste aparelho e protege seus treinos e mídias na nuvem.
       </p>
-      <div>
-        <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">URL do Google Apps Script</label>
-        <input type="url" id="drive-webhook-url-input" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-slate-950 border border-slate-800 focus:border-sky-500 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none font-mono" />
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold uppercase text-emerald-400 mb-1 flex items-center gap-1">
+            <i data-lucide="key-round" class="w-3.5 h-3.5"></i>
+            Chave de Segurança (Senha da API)
+          </label>
+          <div class="relative">
+            <input type="password" id="drive-secret-token-input" placeholder="Digite a senha configurada no Apps Script..." class="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500 rounded-xl pl-3.5 pr-10 py-2.5 text-xs text-white outline-none font-mono" />
+            <button type="button" onclick="toggleTokenVisibility()" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-1" title="Mostrar/Ocultar Senha">
+              <i data-lucide="eye" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">URL do Google Apps Script</label>
+          <input type="url" id="drive-webhook-url-input" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-slate-950 border border-slate-800 focus:border-sky-500 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none font-mono" />
+        </div>
       </div>
       <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800">
         <div class="flex items-center gap-1.5">
           <button onclick="syncFromDrive(true)" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-300 text-xs font-bold flex items-center gap-1">
             <i data-lucide="cloud-download" class="w-3.5 h-3.5"></i>
-            Baixar do Drive
+            Puxar Agora
           </button>
           <button onclick="syncToDrive(true)" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-300 text-xs font-bold flex items-center gap-1">
             <i data-lucide="cloud-upload" class="w-3.5 h-3.5"></i>
-            Enviar Agora
+            Subir Agora
           </button>
         </div>
-        <button onclick="saveDriveConfig()" class="px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 text-xs font-extrabold">Salvar URL</button>
+        <button onclick="saveDriveConfig()" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-extrabold">Salvar & Sincronizar</button>
       </div>
     </div>
   </div>
@@ -723,13 +737,14 @@
     ];
 
     // =========================================================================
-    // 2. ESTADO GLOBAL, SANITIZAÇÃO E MERGE SEGURO DE EXERCÍCIOS
+    // 2. ESTADO GLOBAL, SANITIZAÇÃO, TOKEN E MERGE SEGURO DE EXERCÍCIOS
     // =========================================================================
     const STORAGE_KEYS = {
       EXERCISES: 'vibeworkout_exercises_v4',
       HISTORY: 'vibeworkout_history_v1',
       CURRENT_WORKOUT: 'vibeworkout_current_v1',
-      DRIVE_URL: 'vibeworkout_gdrive_url_v1'
+      DRIVE_URL: 'vibeworkout_gdrive_url_v1',
+      DRIVE_TOKEN: 'vibeworkout_gdrive_token_v1'
     };
 
     let exercisesDB = [];
@@ -757,6 +772,10 @@
 
     function getDriveUrl() {
       return localStorage.getItem(STORAGE_KEYS.DRIVE_URL) || DEFAULT_DRIVE_WEBAPP_URL;
+    }
+
+    function getDriveToken() {
+      return localStorage.getItem(STORAGE_KEYS.DRIVE_TOKEN) || '';
     }
 
     function getTodayISO() {
@@ -965,7 +984,7 @@
     }
 
     // =========================================================================
-    // 3. CALENDÁRIO NA HOMEPAGE
+    // 3. CALENDÁRIO NA HOMEPAGE (COM BOTÃO DE EXCLUIR DIRETO)
     // =========================================================================
     function renderCalendarTab() {
       const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
@@ -1099,6 +1118,9 @@
                   Progressão
                 </button>
                 <button onclick="openSavedWorkoutForEdit('${escapeJsAttr(wk.id)}')" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold">Editar</button>
+                <button onclick="confirmDeleteSavedWorkout('${escapeJsAttr(wk.id)}')" title="Excluir Treino do Calendário" class="p-1.5 rounded-xl bg-slate-900 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 border border-slate-800 transition-colors">
+                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
               </div>
             </div>
           `).join('')}
@@ -1927,15 +1949,16 @@
       modal.classList.remove('flex');
     }
 
-    // Faz upload direto para a pasta VibeWorkout_Midias no Google Drive (economiza 100% do localStorage)
+    // Faz upload autenticado direto para a pasta VibeWorkout_Midias no Google Drive
     async function handleExerciseImageUpload(event) {
       const file = event.target.files?.[0];
       if (!file) return;
 
       const driveUrl = getDriveUrl();
+      const token = getDriveToken();
       const btnTextEl = document.getElementById('upload-media-btn-text');
 
-      if (driveUrl) {
+      if (driveUrl && token) {
         if (file.size > 15 * 1024 * 1024) {
           showToast('O arquivo excede 15MB! Escolha um GIF ou imagem menor.', 'warning');
           event.target.value = '';
@@ -1956,6 +1979,7 @@
               method: 'POST',
               headers: { 'Content-Type': 'text/plain;charset=utf-8' },
               body: JSON.stringify({
+                token: token,
                 action: 'uploadMedia',
                 fileName: safeFileName,
                 mimeType: file.type || 'image/gif',
@@ -1964,14 +1988,19 @@
             });
 
             const data = await res.json();
+            if (data && data.unauthorized) {
+              showToast('Senha do Drive incorreta! Verifique no botão Drive.', 'warning');
+              openDriveConfigModal();
+              return;
+            }
             if (data && data.ok && data.directUrl) {
               document.getElementById('ex-form-media-url').value = data.directUrl;
               showToast('Mídia salva no Google Drive! Clique em Salvar Exercício.', 'success');
             } else {
-              throw new Error(data.error || 'Resposta sem directUrl (verifique se o Apps Script foi atualizado)');
+              throw new Error(data.error || 'Resposta sem directUrl');
             }
           } catch (err) {
-            showToast('Não foi possível enviar ao Drive. Verifique se atualizou a implantação do Apps Script.', 'warning');
+            showToast('Não foi possível enviar ao Drive. Verifique sua senha e implantação do Apps Script.', 'warning');
           } finally {
             if (btnTextEl) btnTextEl.textContent = 'Subir para o Drive';
           }
@@ -1981,19 +2010,12 @@
         return;
       }
 
-      // Fallback local caso o usuário apague a URL do Drive
-      if (file.size > 1.5 * 1024 * 1024) {
-        showToast('Sem Drive configurado, o limite local é 1.5MB.', 'warning');
+      if (!token) {
+        showToast('Configure sua Senha de Segurança no botão Drive para subir arquivos na nuvem!', 'warning');
+        openDriveConfigModal();
         event.target.value = '';
         return;
       }
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        document.getElementById('ex-form-media-url').value = e.target.result;
-        showToast('Imagem carregada localmente! Clique em Salvar Exercício.', 'info');
-      };
-      reader.readAsDataURL(file);
-      event.target.value = '';
     }
 
     function saveExerciseForm() {
@@ -2268,7 +2290,7 @@
                 Comparar Progressão
               </button>
               <button onclick="openSavedWorkoutForEdit('${escapeJsAttr(wk.id)}')" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold">Abrir / Editar</button>
-              <button onclick="confirmDeleteSavedWorkout('${escapeJsAttr(wk.id)}')" class="p-1.5 rounded-xl bg-slate-900 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 border border-slate-800"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+              <button onclick="confirmDeleteSavedWorkout('${escapeJsAttr(wk.id)}')" class="p-1.5 rounded-xl bg-slate-900 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 border border-slate-800" title="Excluir Treino"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
             </div>
           </div>
 
@@ -2308,12 +2330,13 @@
     }
 
     function confirmDeleteSavedWorkout(workoutId) {
-      openConfirmModal('Excluir Treino', 'Deseja excluir este treino do histórico?', () => {
+      openConfirmModal('Excluir Treino', 'Deseja excluir este treino permanentemente do calendário e do histórico?', () => {
         workoutHistory = workoutHistory.filter(w => w.id !== workoutId);
         safeSetLocalStorage(STORAGE_KEYS.HISTORY, JSON.stringify(workoutHistory));
         renderCalendarTab();
         renderHistoryTab();
         syncToDrive(false);
+        showToast('Treino excluído com sucesso!', 'info');
       });
     }
 
@@ -2334,13 +2357,15 @@
     }
 
     // =========================================================================
-    // 13. AUTO-SYNC COM GOOGLE DRIVE E BACKUP JSON
+    // 13. AUTO-SYNC COM GOOGLE DRIVE, AUTENTICAÇÃO POR TOKEN E BACKUP JSON
     // =========================================================================
     function openDriveConfigModal() {
       document.getElementById('drive-webhook-url-input').value = getDriveUrl();
+      document.getElementById('drive-secret-token-input').value = getDriveToken();
       const modal = document.getElementById('modal-drive-config');
       modal.classList.remove('hidden');
       modal.classList.add('flex');
+      lucide.createIcons();
     }
 
     function closeDriveConfigModal() {
@@ -2349,28 +2374,43 @@
       modal.classList.remove('flex');
     }
 
+    function toggleTokenVisibility() {
+      const input = document.getElementById('drive-secret-token-input');
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
     function saveDriveConfig() {
       const url = document.getElementById('drive-webhook-url-input').value.trim() || DEFAULT_DRIVE_WEBAPP_URL;
+      const token = document.getElementById('drive-secret-token-input').value.trim();
       safeSetLocalStorage(STORAGE_KEYS.DRIVE_URL, url);
+      safeSetLocalStorage(STORAGE_KEYS.DRIVE_TOKEN, token);
       closeDriveConfigModal();
-      showToast('URL do Google Drive salva! Sincronizando...', 'success');
-      syncToDrive(true);
+      showToast('Configurações de segurança salvas! Sincronizando...', 'success');
+      syncFromDrive(true);
     }
 
     async function syncToDrive(manual = false) {
       const url = getDriveUrl();
-      if (!url) {
-        if (manual) showToast('Configure a URL do Google Apps Script primeiro.', 'warning');
+      const token = getDriveToken();
+      const statusText = document.getElementById('drive-status-text');
+
+      if (!url || !token) {
+        if (statusText) statusText.textContent = 'Sem Senha 🔒';
+        if (manual) {
+          showToast('Digite sua Senha de Segurança para sincronizar com o Google Drive!', 'warning');
+          openDriveConfigModal();
+        }
         return;
       }
-      const statusText = document.getElementById('drive-status-text');
+
       if (statusText) statusText.textContent = 'Salvando...';
 
       try {
-        await fetch(url, {
+        const res = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify({
+            token: token,
             app: 'VibeWorkout',
             updatedAt: new Date().toISOString(),
             exercisesDB,
@@ -2378,6 +2418,13 @@
             currentWorkout
           })
         });
+        const data = await res.json();
+        if (data && data.unauthorized) {
+          if (statusText) statusText.textContent = 'Senha Inválida 🔒';
+          showToast('Acesso negado: Senha do Google Drive incorreta!', 'warning');
+          if (manual) openDriveConfigModal();
+          return;
+        }
         if (statusText) statusText.textContent = 'Drive OK ✓';
         if (manual) showToast('Todos os dados foram salvos no seu Google Drive!', 'success');
       } catch (err) {
@@ -2388,16 +2435,32 @@
 
     async function syncFromDrive(manual = false) {
       const url = getDriveUrl();
-      if (!url) {
-        if (manual) showToast('Configure a URL do Google Apps Script primeiro.', 'warning');
+      const token = getDriveToken();
+      const statusText = document.getElementById('drive-status-text');
+
+      if (!url || !token) {
+        if (statusText) statusText.textContent = 'Configurar 🔒';
+        if (manual) {
+          showToast('Digite sua Senha de Segurança para puxar os dados do Drive.', 'warning');
+          openDriveConfigModal();
+        }
         return;
       }
-      const statusText = document.getElementById('drive-status-text');
+
       if (statusText) statusText.textContent = 'Baixando...';
 
       try {
-        const res = await fetch(url);
+        const authUrl = `${url}${url.includes('?') ? '&' : '?'}token=${encodeURIComponent(token)}`;
+        const res = await fetch(authUrl);
         const data = await res.json();
+
+        if (data && data.unauthorized) {
+          if (statusText) statusText.textContent = 'Bloqueado 🔒';
+          showToast('Senha incorreta! Verifique no botão Drive.', 'warning');
+          if (manual) openDriveConfigModal();
+          return;
+        }
+
         if (!data.empty) {
           if (Array.isArray(data.exercisesDB)) {
             exercisesDB = mergeExercisesWithDefaults(data.exercisesDB);
